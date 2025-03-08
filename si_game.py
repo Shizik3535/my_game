@@ -274,7 +274,8 @@ class HostWindow(QMainWindow):
             h_layout.addWidget(topic_label)
             for i, q in enumerate(questions):
                 btn = QPushButton(f"{q['value']}")
-                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #ffa3a6; color: #ffa3a6; }")
+                # TODO: change coclor
+                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #b9d1f8; color: #b9d1f8; }")
                 btn.clicked.connect(lambda checked, t=topic, idx=i: self.select_question(t, idx))
                 btn.setEnabled(not q.get("used", False))
                 h_layout.addWidget(btn)
@@ -411,7 +412,6 @@ class PlayerWindow(QMainWindow):
         self.topic_label = QLabel("")
         self.center_question_label = QLabel("")
         self.feedback_label = QLabel("")
-        # TODO: Add center text
         self.topic_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.center_question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -485,7 +485,8 @@ class PlayerWindow(QMainWindow):
             h_layout.addWidget(topic_label)
             for q in questions:
                 btn = QPushButton(f"{q['value']}")
-                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #ffa3a6; color: #ffa3a6; }")
+                # TODO: change color
+                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #b9d1f8; color: #b9d1f8; }")
                 btn.setEnabled(not q.get("used", False))
                 h_layout.addWidget(btn)
             self.board_container_layout.addLayout(h_layout)
@@ -514,6 +515,7 @@ class PlayerWindow(QMainWindow):
     def update_credits_page(self):
         credits_text = "С 8 марта!\n\nСпасибо за игру!"
         self.credits_label.setText(credits_text)
+        self.credits_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_view(self, data):
         if self.stack.currentIndex() == 1:
@@ -524,7 +526,7 @@ class PlayerWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    apply_stylesheet(app, theme='light_red.xml')
+    apply_stylesheet(app, theme='my_theme.xml')
     controller = GameController()
     # Предзаполнение списка игроков
     default_players = ["Вика", "Алина", "Интизар", "Олеся", "Оля", "Настя", "Арина", "Соня", "Милена", "Марина Юрьевна"]
