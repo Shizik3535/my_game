@@ -18,13 +18,15 @@ class GameController(QObject):
             "current_answer": None,
             "current_value": None,
             "show_answer": False,   # True, если был правильный ответ
-            "incorrect": False      # True, если ответ неверный
+            "incorrect": False,     # True, если ответ неверный
+            "cat_in_bag": False     # True, если вопрос является "Котом в мешке"
         }
         # Определяем раунды: первые два обычные, третий – финальный
+        # Пример: Для одного из вопросов задаём "cat_in_bag": True
         self.rounds = {
             "Раунд 1": {
                 "Тема 1": [
-                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
+                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False, "cat_in_bag": True},
                     {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
                     {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
                     {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
@@ -84,6 +86,7 @@ class GameController(QObject):
             self.state["current_value"] = q_data["value"]
             self.state["show_answer"] = False
             self.state["incorrect"] = False
+            self.state["cat_in_bag"] = q_data.get("cat_in_bag", False)
             self.emit_state()
 
     def mark_answer(self, player, correct: bool):
@@ -111,6 +114,7 @@ class GameController(QObject):
             "current_value": None,
             "show_answer": False,
             "incorrect": False,
+            "cat_in_bag": False
         }
         self.emit_state()
 
@@ -130,7 +134,6 @@ class GameController(QObject):
             self.current_round = "Раунд 2"
         elif self.current_round == "Раунд 2":
             self.current_round = "Раунд 1"
-        # Если уже "Раунд 1", возвращение назад не производится.
         self.emit_state()
 
     def is_game_over(self):
@@ -172,6 +175,8 @@ class HostWindow(QMainWindow):
 
         # Отображение названия раунда по центру с отступом сверху 50 пикселей
         self.round_label = QLabel(f"{self.controller.current_round}")
+        self.round_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.round_label.setStyleSheet("margin-top: 50px;")
         main_layout.addWidget(self.round_label)
 
         # Отображение выбранного вопроса (ведущий видит ответ)
@@ -260,7 +265,11 @@ class HostWindow(QMainWindow):
         self.current_question_label.setText(
             f"Тема: {st['current_topic']} | Вопрос: {st['current_question']} | Ответ: {st['current_answer']}"
         )
-        self.player_window.set_question_page()
+        # Если выбранный вопрос является "Котом в мешке", на экране игроков показываем специальную страницу
+        if st.get("cat_in_bag", False):
+            self.player_window.set_cat_page()
+        else:
+            self.player_window.set_question_page()
 
     def mark_correct(self):
         player = self.player_select.currentText()
@@ -387,7 +396,7 @@ class PlayerWindow(QMainWindow):
         self.question_page.setLayout(q_layout)
         self.stack.addWidget(self.question_page)
 
-        # Страница 3: Итоговая страница с результатами
+        # Страница 3: Страница результатов
         self.results_page = QWidget()
         r_layout = QVBoxLayout()
         r_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -396,7 +405,7 @@ class PlayerWindow(QMainWindow):
         self.results_page.setLayout(r_layout)
         self.stack.addWidget(self.results_page)
 
-        # Страница 4: Титры
+        # Страница 4: Страница титров
         self.credits_page = QWidget()
         c_layout = QVBoxLayout()
         c_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -404,6 +413,15 @@ class PlayerWindow(QMainWindow):
         c_layout.addWidget(self.credits_label)
         self.credits_page.setLayout(c_layout)
         self.stack.addWidget(self.credits_page)
+
+        # Новая страница 5: "Кот в мешке"
+        self.cat_page = QWidget()
+        cat_layout = QVBoxLayout()
+        cat_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.cat_label = QLabel("Этот вопрос – КОТ В МЕШКЕ!")
+        cat_layout.addWidget(self.cat_label)
+        self.cat_page.setLayout(cat_layout)
+        self.stack.addWidget(self.cat_page)
 
         self.setCentralWidget(self.stack)
         self.stack.setCurrentIndex(0)
@@ -427,6 +445,10 @@ class PlayerWindow(QMainWindow):
     def set_credits_page(self):
         self.update_credits_page()
         self.stack.setCurrentIndex(4)
+
+    def set_cat_page(self):
+        # Показываем страницу "Кот в мешке"
+        self.stack.setCurrentIndex(5)
 
     def populate_board(self):
         clear_layout(self.board_container_layout)
