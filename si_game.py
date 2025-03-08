@@ -17,48 +17,48 @@ class GameController(QObject):
             "current_question": None,
             "current_answer": None,
             "current_value": None,
-            "show_answer": False,   # True, если был правильный ответ
-            "incorrect": False,     # True, если ответ неверный
+            "show_answer": False,   # True, если показывается правильный ответ
+            "incorrect": False,     # True, если был неправильный ответ
             "cat_in_bag": False     # True, если вопрос является "Котом в мешке"
         }
         # Определяем раунды: первые два обычные, третий – финальный
-        # Пример: Для одного из вопросов задаём "cat_in_bag": True
+        # Для примера у одного из вопросов в Раунде 1 ставим флаг "cat_in_bag": True
         self.rounds = {
             "Раунд 1": {
-                "Тема 1": [
-                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False, "cat_in_bag": True},
-                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                "Цветы": [
+                    {"question": "Какой цветок традиционно дарят на 8 марта?", "answer": "Мимоза", "value": 100, "used": False, "cat_in_bag": True},
+                    {"question": "Какой цветок символизирует нежность и женственность?", "answer": "Роза", "value": 200, "used": False},
+                    {"question": "Какой цветок ассоциируется с приходом весны?", "answer": "Тюльпан", "value": 300, "used": False},
+                    {"question": "Какой цветок часто выбирают для поздравлений на 8 марта?", "answer": "Гвоздика", "value": 400, "used": False},
+                    {"question": "Какой цветок символизирует любовь и страсть?", "answer": "Пион", "value": 500, "used": False},
                 ],
-                "Тема 2": [
-                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                "История 8 марта": [
+                    {"question": "В каком году впервые отметили Международный женский день?", "answer": "1911", "value": 100, "used": False},
+                    {"question": "Какой идеей вдохновлен праздник 8 марта?", "answer": "Борьба за равенство женщин", "value": 200, "used": False},
+                    {"question": "В какой стране 8 марта стал официальным праздником?", "answer": "Россия", "value": 300, "used": False, "cat_in_bag": True},
+                    {"question": "Что символизирует 8 марта для женщин?", "answer": "Признание их заслуг", "value": 400, "used": False},
+                    {"question": "Какой жест сопровождает празднование 8 марта во многих странах?", "answer": "Дарение цветов", "value": 500, "used": False},
                 ]
             },
             "Раунд 2": {
-                "Тема 3": [
-                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                "Знаменитые женщины": [
+                    {"question": "Кто была первой женщиной-космонавтом?", "answer": "Валентина Терешкова", "value": 100, "used": False},
+                    {"question": "Кто дважды получила Нобелевскую премию?", "answer": "Мария Кюри", "value": 200, "used": False},
+                    {"question": "Кто является символом борьбы за права женщин?", "answer": "Симона де Бовуар", "value": 300, "used": False},
+                    {"question": "Кто известна своей благотворительной деятельностью в Индии?", "answer": "Мать Тереза", "value": 400, "used": False},
+                    {"question": "Кто стала известной в борьбе за гражданские права в США?", "answer": "Роза Паркс", "value": 500, "used": False},
                 ],
-                "Тема 4": [
-                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                "Традиции и обычаи": [
+                    {"question": "Какая страна известна своими весенними фестивалями, связанными с 8 марта?", "answer": "Италия", "value": 100, "used": False},
+                    {"question": "Что традиционно дарят женщинам на 8 марта в России?", "answer": "Цветы", "value": 200, "used": False},
+                    {"question": "Какой десерт часто готовят к 8 марта?", "answer": "Торт", "value": 300, "used": False},
+                    {"question": "Какие мероприятия организуются в честь 8 марта?", "answer": "Концерты и выставки", "value": 400, "used": False},
+                    {"question": "Какой символ часто используется в украшениях на 8 марта?", "answer": "Цветочные мотивы", "value": 500, "used": False},
                 ]
             },
             "Финальный раунд": {
                 "Финальная тема": [
-                    {"question": "Финальный вопрос", "answer": "Финальный ответ", "value": 1000, "used": False}
+                    {"question": "Какой главный посыл Международного женского дня?", "answer": "Равенство и уважение", "value": 1000, "used": False}
                 ]
             }
         }
@@ -96,6 +96,7 @@ class GameController(QObject):
                 self.state["show_answer"] = True
                 self.state["incorrect"] = False
                 self.emit_state()
+                # Отмечаем вопрос как использованный
                 topic = self.state["current_topic"]
                 if topic:
                     for q_data in self.rounds[self.current_round][topic]:
@@ -103,8 +104,26 @@ class GameController(QObject):
                             q_data["used"] = True
                             break
             else:
-                self.state["incorrect"] = True
-                self.emit_state()
+                # Если вопрос "Кот в мешке"
+                if self.state.get("cat_in_bag", False):
+                    self.state["incorrect"] = True
+                    self.emit_state()
+                    # Через 3 секунды показываем правильный ответ и отмечаем вопрос как использованный (без начисления баллов)
+                    QTimer.singleShot(3000, self.mark_cat_question_used)
+                else:
+                    self.state["incorrect"] = True
+                    self.emit_state()
+
+    def mark_cat_question_used(self):
+        # Для "Кота в мешке" после неверного ответа – показываем правильный ответ и отмечаем вопрос как использованный
+        topic = self.state["current_topic"]
+        if topic:
+            for q_data in self.rounds[self.current_round][topic]:
+                if q_data["question"] == self.state["current_question"]:
+                    q_data["used"] = True
+                    break
+        self.state["show_answer"] = True
+        self.emit_state()
 
     def clear_current_question(self):
         self.state = {
@@ -250,6 +269,8 @@ class HostWindow(QMainWindow):
         for topic, questions in topics.items():
             h_layout = QHBoxLayout()
             topic_label = QLabel(topic)
+            topic_label.setFixedWidth(250)
+            topic_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             h_layout.addWidget(topic_label)
             for i, q in enumerate(questions):
                 btn = QPushButton(f"{q['value']}")
@@ -265,7 +286,7 @@ class HostWindow(QMainWindow):
         self.current_question_label.setText(
             f"Тема: {st['current_topic']} | Вопрос: {st['current_question']} | Ответ: {st['current_answer']}"
         )
-        # Если выбранный вопрос является "Котом в мешке", на экране игроков показываем специальную страницу
+        # Если вопрос является "Котом в мешке", показываем специальную страницу
         if st.get("cat_in_bag", False):
             self.player_window.set_cat_page()
         else:
@@ -390,6 +411,10 @@ class PlayerWindow(QMainWindow):
         self.topic_label = QLabel("")
         self.center_question_label = QLabel("")
         self.feedback_label = QLabel("")
+        # TODO: Add center text
+        self.topic_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.center_question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         q_layout.addWidget(self.topic_label)
         q_layout.addWidget(self.center_question_label)
         q_layout.addWidget(self.feedback_label)
@@ -414,7 +439,7 @@ class PlayerWindow(QMainWindow):
         self.credits_page.setLayout(c_layout)
         self.stack.addWidget(self.credits_page)
 
-        # Новая страница 5: "Кот в мешке"
+        # Страница 5: Страница "Кот в мешке"
         self.cat_page = QWidget()
         cat_layout = QVBoxLayout()
         cat_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -447,7 +472,6 @@ class PlayerWindow(QMainWindow):
         self.stack.setCurrentIndex(4)
 
     def set_cat_page(self):
-        # Показываем страницу "Кот в мешке"
         self.stack.setCurrentIndex(5)
 
     def populate_board(self):
@@ -455,7 +479,9 @@ class PlayerWindow(QMainWindow):
         topics = self.controller.rounds[self.controller.current_round]
         for topic, questions in topics.items():
             h_layout = QHBoxLayout()
-            topic_label = QLabel(topic)
+            topic_label = QLabel(f"{topic}:")
+            topic_label.setFixedWidth(300)
+            topic_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             h_layout.addWidget(topic_label)
             for q in questions:
                 btn = QPushButton(f"{q['value']}")
