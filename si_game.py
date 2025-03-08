@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import pyqtSignal, QObject, QTimer, Qt
 from qt_material import apply_stylesheet
 
-# Контроллер игры: хранит состояние текущего вопроса, темы, вопросы и игроков
+# Контроллер игры: хранит состояние текущего вопроса, раунда, темы, вопросы и игроков
 class GameController(QObject):
     update_player_state = pyqtSignal(dict)  # сигнал для оповещения окон об изменениях
 
@@ -17,39 +17,50 @@ class GameController(QObject):
             "current_question": None,
             "current_answer": None,
             "current_value": None,
-            "show_answer": False,   # становится True при правильном ответе
-            "incorrect": False      # True, если был неправильный ответ
+            "show_answer": False,   # True, если был правильный ответ
+            "incorrect": False      # True, если ответ неверный
         }
-        self.topics = {
-            "Тема 1": [
-                {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
-            ],
-            "Тема 2": [
-                {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
-            ],
-            "Тема 3": [
-                {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
-            ],
-            "Тема 4": [
-                {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
-                {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
-                {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
-                {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
-                {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
-            ],
+        # Определяем раунды: первые два обычные, третий – финальный
+        self.rounds = {
+            "Раунд 1": {
+                "Тема 1": [
+                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
+                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
+                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
+                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
+                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                ],
+                "Тема 2": [
+                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
+                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
+                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
+                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
+                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                ]
+            },
+            "Раунд 2": {
+                "Тема 3": [
+                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
+                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
+                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
+                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
+                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                ],
+                "Тема 4": [
+                    {"question": "Вопрос 1", "answer": "Ответ 1", "value": 100, "used": False},
+                    {"question": "Вопрос 2", "answer": "Ответ 1", "value": 200, "used": False},
+                    {"question": "Вопрос 3", "answer": "Ответ 1", "value": 300, "used": False},
+                    {"question": "Вопрос 4", "answer": "Ответ 2", "value": 400, "used": False},
+                    {"question": "Вопрос 5", "answer": "Ответ 2", "value": 500, "used": False},
+                ]
+            },
+            "Финальный раунд": {
+                "Финальная тема": [
+                    {"question": "Финальный вопрос", "answer": "Финальный ответ", "value": 1000, "used": False}
+                ]
+            }
         }
+        self.current_round = "Раунд 1"
         self.players = {}  # ключ – имя игрока, значение – набранные очки
 
     def add_player(self, name):
@@ -63,9 +74,8 @@ class GameController(QObject):
             self.emit_state()
 
     def select_question(self, topic, q_index):
-        if topic in self.topics and len(self.topics[topic]) > q_index:
-            q_data = self.topics[topic][q_index]
-            # Если вопрос уже использован, не выбираем его
+        if topic in self.rounds[self.current_round] and len(self.rounds[self.current_round][topic]) > q_index:
+            q_data = self.rounds[self.current_round][topic][q_index]
             if q_data.get("used", False):
                 return
             self.state["current_topic"] = topic
@@ -83,20 +93,17 @@ class GameController(QObject):
                 self.state["show_answer"] = True
                 self.state["incorrect"] = False
                 self.emit_state()
-                # Отмечаем выбранный вопрос как использованный (не удаляем)
                 topic = self.state["current_topic"]
                 if topic:
-                    for q_data in self.topics[topic]:
+                    for q_data in self.rounds[self.current_round][topic]:
                         if q_data["question"] == self.state["current_question"]:
                             q_data["used"] = True
                             break
             else:
-                # При неправильном ответе устанавливаем флаг – вопрос остаётся активным
                 self.state["incorrect"] = True
                 self.emit_state()
 
     def clear_current_question(self):
-        # Сбрасываем состояние текущего вопроса (после показа ответа)
         self.state = {
             "current_topic": None,
             "current_question": None,
@@ -107,14 +114,33 @@ class GameController(QObject):
         }
         self.emit_state()
 
+    def is_round_over(self):
+        topics = self.rounds[self.current_round]
+        return all(all(q.get("used", False) for q in q_list) for q_list in topics.values())
+
+    def advance_round(self):
+        if self.current_round == "Раунд 1":
+            self.current_round = "Раунд 2"
+        elif self.current_round == "Раунд 2":
+            self.current_round = "Финальный раунд"
+        self.emit_state()
+
+    def previous_round(self):
+        if self.current_round == "Финальный раунд":
+            self.current_round = "Раунд 2"
+        elif self.current_round == "Раунд 2":
+            self.current_round = "Раунд 1"
+        # Если уже "Раунд 1", возвращение назад не производится.
+        self.emit_state()
+
     def is_game_over(self):
-        # Игра закончена, если во всех темах все вопросы отмечены как использованные
-        return all(all(q.get("used", False) for q in q_list) for q_list in self.topics.values())
+        return self.current_round == "Финальный раунд" and self.is_round_over()
 
     def emit_state(self):
         data = {
             "state": self.state,
-            "topics": self.topics,
+            "rounds": self.rounds,
+            "current_round": self.current_round,
             "players": self.players,
             "game_over": self.is_game_over()
         }
@@ -144,24 +170,18 @@ class HostWindow(QMainWindow):
         central = QWidget()
         main_layout = QVBoxLayout()
 
+        # Отображение названия раунда по центру с отступом сверху 50 пикселей
+        self.round_label = QLabel(f"{self.controller.current_round}")
+        main_layout.addWidget(self.round_label)
+
         # Отображение выбранного вопроса (ведущий видит ответ)
         self.current_question_label = QLabel("Нет выбранного вопроса")
         main_layout.addWidget(self.current_question_label)
 
         # Доска с темами и вопросами
         self.board_layout = QVBoxLayout()
-        self.buttons = {}
-        for topic, questions in self.controller.topics.items():
-            h_layout = QHBoxLayout()
-            topic_label = QLabel(topic)
-            h_layout.addWidget(topic_label)
-            for i, q in enumerate(questions):
-                btn = QPushButton(f"{q['value']}")
-                btn.clicked.connect(lambda checked, t=topic, idx=i: self.select_question(t, idx))
-                self.buttons[(topic, i)] = btn
-                h_layout.addWidget(btn)
-            self.board_layout.addLayout(h_layout)
         main_layout.addLayout(self.board_layout)
+        self.populate_board()
 
         # Панель управления: выбор игрока и проверка ответа
         control_layout = QHBoxLayout()
@@ -189,29 +209,50 @@ class HostWindow(QMainWindow):
         player_mgmt_layout.addWidget(self.btn_remove_player)
         main_layout.addLayout(player_mgmt_layout)
 
-        # Панель переключения слайдов в окне игроков (добавлена кнопка для титров)
+        # Панель переключения слайдов и перехода между раундами
         slide_layout = QHBoxLayout()
         self.btn_show_welcome = QPushButton("Показать приветствие")
         self.btn_show_board = QPushButton("Показать доску")
         self.btn_show_question = QPushButton("Показать вопрос")
         self.btn_show_results = QPushButton("Показать результаты")
         self.btn_show_credits = QPushButton("Показать титры")
+        self.btn_prev_round = QPushButton("Предыдущий раунд")
+        self.btn_next_round = QPushButton("Следующий раунд")
         self.btn_show_welcome.clicked.connect(lambda: self.player_window.set_welcome_page())
         self.btn_show_board.clicked.connect(lambda: self.player_window.set_board_page())
         self.btn_show_question.clicked.connect(lambda: self.player_window.set_question_page())
         self.btn_show_results.clicked.connect(lambda: self.player_window.set_results_page())
         self.btn_show_credits.clicked.connect(lambda: self.player_window.set_credits_page())
+        self.btn_next_round.clicked.connect(self.advance_round)
+        self.btn_prev_round.clicked.connect(self.go_previous_round)
         slide_layout.addWidget(self.btn_show_welcome)
         slide_layout.addWidget(self.btn_show_board)
         slide_layout.addWidget(self.btn_show_question)
         slide_layout.addWidget(self.btn_show_results)
         slide_layout.addWidget(self.btn_show_credits)
+        slide_layout.addWidget(self.btn_prev_round)
+        slide_layout.addWidget(self.btn_next_round)
         main_layout.addLayout(slide_layout)
 
         central.setLayout(main_layout)
         self.setCentralWidget(central)
 
         self.controller.update_player_state.connect(self.update_view)
+
+    def populate_board(self):
+        clear_layout(self.board_layout)
+        topics = self.controller.rounds[self.controller.current_round]
+        for topic, questions in topics.items():
+            h_layout = QHBoxLayout()
+            topic_label = QLabel(topic)
+            h_layout.addWidget(topic_label)
+            for i, q in enumerate(questions):
+                btn = QPushButton(f"{q['value']}")
+                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #ffa3a6; color: #ffa3a6; }")
+                btn.clicked.connect(lambda checked, t=topic, idx=i: self.select_question(t, idx))
+                btn.setEnabled(not q.get("used", False))
+                h_layout.addWidget(btn)
+            self.board_layout.addLayout(h_layout)
 
     def select_question(self, topic, index):
         self.controller.select_question(topic, index)
@@ -228,12 +269,12 @@ class HostWindow(QMainWindow):
             return
         self.controller.mark_answer(player, True)
         self.player_window.set_question_page()
-        # Через 3 секунды очищаем текущий вопрос и переключаем окно игроков на доску
         QTimer.singleShot(3000, self.finish_question)
 
     def finish_question(self):
         self.controller.clear_current_question()
         self.player_window.set_board_page()
+        self.populate_board()
 
     def mark_incorrect(self):
         player = self.player_select.currentText()
@@ -261,15 +302,22 @@ class HostWindow(QMainWindow):
         else:
             QMessageBox.warning(self, "Ошибка", "Выберите игрока для удаления")
 
+    def advance_round(self):
+        self.controller.advance_round()
+        self.populate_board()
+        self.current_question_label.setText("Нет выбранного вопроса")
+        self.round_label.setText(f"{self.controller.current_round}")
+        self.player_window.set_board_page()
+
+    def go_previous_round(self):
+        self.controller.previous_round()
+        self.populate_board()
+        self.current_question_label.setText("Нет выбранного вопроса")
+        self.round_label.setText(f"{self.controller.current_round}")
+        self.player_window.set_board_page()
+
     def update_view(self, data):
-        topics = data["topics"]
-        for (topic, i), btn in self.buttons.items():
-            if topic in topics and len(topics[topic]) > i:
-                q = topics[topic][i]
-                btn.setText(f"{q['value']}")
-                btn.setEnabled(not q.get("used", False))
-            else:
-                btn.setEnabled(False)
+        self.populate_board()
         st = data["state"]
         if st["current_question"]:
             self.current_question_label.setText(
@@ -277,11 +325,7 @@ class HostWindow(QMainWindow):
             )
         else:
             self.current_question_label.setText("Нет выбранного вопроса")
-        # if data.get("game_over", False):
-        #     self.player_window.set_results_page()
-        #     scores = data["players"]
-        #     results = "\n".join(f"{p}: {s}" for p, s in scores.items())
-        #     QMessageBox.information(self, "Игра окончена", f"Результаты:\n{results}")
+        self.round_label.setText(f"{data['current_round']}")
 
 # Окно для игроков (только для отображения)
 class PlayerWindow(QMainWindow):
@@ -292,7 +336,6 @@ class PlayerWindow(QMainWindow):
         self.resize(600, 500)
         self.initUI()
         self.controller.update_player_state.connect(self.update_view)
-        # Глобальное оформление: увеличенный шрифт для всех виджетов
         self.setStyleSheet(
             "QLabel { font-size: 24px; } "
             "QPushButton { font-size: 24px; } "
@@ -308,7 +351,6 @@ class PlayerWindow(QMainWindow):
         welcome_layout = QVBoxLayout()
         welcome_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.welcome_label = QLabel("Добро пожаловать на игру 'Своя игра - 8 марта'!")
-        self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         welcome_layout.addWidget(self.welcome_label)
         self.welcome_page.setLayout(welcome_layout)
         self.stack.addWidget(self.welcome_page)
@@ -317,6 +359,10 @@ class PlayerWindow(QMainWindow):
         self.board_page = QWidget()
         board_layout = QVBoxLayout()
         board_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.round_label = QLabel(f"{self.controller.current_round}")
+        self.round_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.round_label.setStyleSheet("margin-top: 50px;")
+        board_layout.addWidget(self.round_label)
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         self.board_container = QWidget()
@@ -333,11 +379,8 @@ class PlayerWindow(QMainWindow):
         q_layout = QVBoxLayout()
         q_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.topic_label = QLabel("")
-        self.topic_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.center_question_label = QLabel("")
-        self.center_question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.feedback_label = QLabel("")
-        self.feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         q_layout.addWidget(self.topic_label)
         q_layout.addWidget(self.center_question_label)
         q_layout.addWidget(self.feedback_label)
@@ -349,7 +392,6 @@ class PlayerWindow(QMainWindow):
         r_layout = QVBoxLayout()
         r_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.results_label = QLabel("")
-        self.results_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         r_layout.addWidget(self.results_label)
         self.results_page.setLayout(r_layout)
         self.stack.addWidget(self.results_page)
@@ -359,7 +401,6 @@ class PlayerWindow(QMainWindow):
         c_layout = QVBoxLayout()
         c_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.credits_label = QLabel("")
-        self.credits_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         c_layout.addWidget(self.credits_label)
         self.credits_page.setLayout(c_layout)
         self.stack.addWidget(self.credits_page)
@@ -389,15 +430,14 @@ class PlayerWindow(QMainWindow):
 
     def populate_board(self):
         clear_layout(self.board_container_layout)
-        topics = self.controller.topics
+        topics = self.controller.rounds[self.controller.current_round]
         for topic, questions in topics.items():
             h_layout = QHBoxLayout()
-            h_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             topic_label = QLabel(topic)
-            topic_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             h_layout.addWidget(topic_label)
             for q in questions:
                 btn = QPushButton(f"{q['value']}")
+                btn.setStyleSheet("QPushButton:disabled { border: 2px solid #ffa3a6; color: #ffa3a6; }")
                 btn.setEnabled(not q.get("used", False))
                 h_layout.addWidget(btn)
             self.board_container_layout.addLayout(h_layout)
@@ -430,6 +470,7 @@ class PlayerWindow(QMainWindow):
     def update_view(self, data):
         if self.stack.currentIndex() == 1:
             self.populate_board()
+            self.round_label.setText(f"{data['current_round']}")
         elif self.stack.currentIndex() == 2:
             self.update_question_page()
 
