@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import pyqtSignal, QObject, QTimer, Qt
 from qt_material import apply_stylesheet
 
+
 # Контроллер игры: хранит состояние текущего вопроса, раунда, темы, вопросы и игроков
 class GameController(QObject):
     update_player_state = pyqtSignal(dict)  # сигнал для оповещения окон об изменениях
@@ -25,40 +26,54 @@ class GameController(QObject):
         # Для примера у одного из вопросов в Раунде 1 ставим флаг "cat_in_bag": True
         self.rounds = {
             "Раунд 1": {
-                "Цветы": [
-                    {"question": "Какой цветок традиционно дарят на 8 марта?", "answer": "Мимоза", "value": 100, "used": False, "cat_in_bag": True},
-                    {"question": "Какой цветок символизирует нежность и женственность?", "answer": "Роза", "value": 200, "used": False},
-                    {"question": "Какой цветок ассоциируется с приходом весны?", "answer": "Тюльпан", "value": 300, "used": False},
-                    {"question": "Какой цветок часто выбирают для поздравлений на 8 марта?", "answer": "Гвоздика", "value": 400, "used": False},
-                    {"question": "Какой цветок символизирует любовь и страсть?", "answer": "Пион", "value": 500, "used": False},
+                "Кто самая-самая": [
+                    {"question": "Самая крошечная сказочная девочка?", "answer": "Дюймовочка", "value": 100, "used": False},
+                    {"question": "Самая новогодняя дама на свете", "answer": "Снегурочка", "value": 200, "used": False},
+                    {"question": "Самая квакающая дама на свете", "answer": "Царевна-лягушка", "value": 300, "used": False},
+                    {"question": "Самая лучшая дама на свете!", "answer": "Мама", "value": 400, "used": False},
+                    {"question": "Самая большая рёва на свете.", "answer": "Несмеяна", "value": 500, "used": False}
                 ],
-                "История 8 марта": [
-                    {"question": "В каком году впервые отметили Международный женский день?", "answer": "1911", "value": 100, "used": False},
-                    {"question": "Какой идеей вдохновлен праздник 8 марта?", "answer": "Борьба за равенство женщин", "value": 200, "used": False},
-                    {"question": "В какой стране 8 марта стал официальным праздником?", "answer": "Россия", "value": 300, "used": False, "cat_in_bag": True},
-                    {"question": "Что символизирует 8 марта для женщин?", "answer": "Признание их заслуг", "value": 400, "used": False},
-                    {"question": "Какой жест сопровождает празднование 8 марта во многих странах?", "answer": "Дарение цветов", "value": 500, "used": False},
-                ]
+                "Мамины вещи": [
+                    {"question": "Эти шарики на нити\nВы примерить не хотите ль?\nНа любые ваши вкусы\nВ маминой шкатулке ...", "answer": "бусы", "value": 100, "used": False},
+                    {"question": "Всех лохматых расчесать,\nКудри в косы заплетать,\nДелать модную прическу\nПомогает нам ….", "answer": "расческа", "value": 200, "used": False},
+                    {"question": "В ушах блестят колечки,\nВ них камушки-сердечки,\nИ прочные застежки\nНа золотых ….", "answer": "сережках", "value": 300, "used": False, "cat_in_bag": True},
+                    {"question": "А у мамы под крылечко\nЗакатилось что?..", "answer": "колечко", "value": 400, "used": False},
+                    {"question": "Сладким запахом конфетки\nПахнет стол и табуретка.\nУронила из руки\nЯ французские ...", "answer": "духи", "value": 500, "used": False}
+                ],
+                "Пословицы, поговорки, крылатые выражения": [
+                    {"question": "Бабе дорога – от печи до……", "answer": "порога", "value": 100, "used": False},
+                    {"question": "Муж голова, а жена-…..", "answer": "шея", "value": 200, "used": False},
+                    {"question": "Для матери ребенок, до старости….","answer": "дитенок","value": 300,"used": False},
+                    {"question": "Бабы каются, а девки…..", "answer": "замуж собираются", "value": 400, "used": False},
+                    {"question": "Курица – птица, женщина-….", "answer": "орлица", "value": 500, "used": False, "cat_in_bag": True}
+                ],
             },
             "Раунд 2": {
-                "Знаменитые женщины": [
-                    {"question": "Кто была первой женщиной-космонавтом?", "answer": "Валентина Терешкова", "value": 100, "used": False},
-                    {"question": "Кто дважды получила Нобелевскую премию?", "answer": "Мария Кюри", "value": 200, "used": False},
-                    {"question": "Кто является символом борьбы за права женщин?", "answer": "Симона де Бовуар", "value": 300, "used": False},
-                    {"question": "Кто известна своей благотворительной деятельностью в Индии?", "answer": "Мать Тереза", "value": 400, "used": False},
-                    {"question": "Кто стала известной в борьбе за гражданские права в США?", "answer": "Роза Паркс", "value": 500, "used": False},
+                "Ох эти преподы": [
+                    {"question": "Что Кулешова говорила про флешки?", "answer": "Там вирусы", "value": 200, "used": False},
+                    {"question": "Если бы он был уткой, то для него это было бы оскорбление", "answer": "Леонид Борисович", "value": 400, "used": False},
+                    {"question": "Сыграл в огромном количестве  многомиллионных фильмов", "answer": "Киселёв А. Ю. (Том Харди)", "value": 600, "used": False},
+                    {"question": "Этому преподавателю всегда нужна Интизар", "answer": "Гугняева Е.А.", "value": 800, "used": False},
+                    {"question": "Благодаря ему мы (не) знаем, что такое \"Modula 2\"", "answer": "Карнаух (DragLeo)", "value": 1000, "used": False},
                 ],
-                "Традиции и обычаи": [
-                    {"question": "Какая страна известна своими весенними фестивалями, связанными с 8 марта?", "answer": "Италия", "value": 100, "used": False},
-                    {"question": "Что традиционно дарят женщинам на 8 марта в России?", "answer": "Цветы", "value": 200, "used": False},
-                    {"question": "Какой десерт часто готовят к 8 марта?", "answer": "Торт", "value": 300, "used": False},
-                    {"question": "Какие мероприятия организуются в честь 8 марта?", "answer": "Концерты и выставки", "value": 400, "used": False},
-                    {"question": "Какой символ часто используется в украшениях на 8 марта?", "answer": "Цветочные мотивы", "value": 500, "used": False},
-                ]
+                "Продолжи фразу": [
+                    {"question": "Благовещенск китайцы ...", "answer": "завидуйте", "value": 200, "used": False},
+                    {"question": "А почему ... больше мячей достаётся", "answer": "Интизар", "value": 400, "used": False},
+                    {"question": "Хех, ну ты ...", "answer": "даёшь/крут", "value": 600, "used": False},
+                    {"question": "что происходит после слов \"вот она вот она\"", "answer": "Черезсебяшечка", "value": 800, "used": False},
+                    {"question": "В тебе ноль ...", "answer": "мужского", "value": 1000, "used": False},
+                ],
+                "Наши любимые": [
+                    {"question": "Cамый высокий пацан в группе", "answer": "Денис", "value": 200, "used": False},
+                    {"question": "Кто первый перевелся на бюджет", "answer": "Андрей", "value": 400, "used": False, "cat_in_bag": True},
+                    {"question": "Кто знает больше всех языков программирования", "answer": "Слава", "value": 600, "used": False},
+                    {"question": "Стример, боксёр и просто приятный парень с интересными историями", "answer": "Тимоха", "value": 800, "used": False},
+                    {"question": "Кто славился своими ногами?", "answer": "Алекс", "value": 1000, "used": False},
+                ],
             },
             "Финальный раунд": {
-                "Финальная тема": [
-                    {"question": "Какой главный посыл Международного женского дня?", "answer": "Равенство и уважение", "value": 1000, "used": False}
+                "Угадайте о ком идёт речь": [
+                    {"question": "Они самые лучезарные, самые душевные, самые красивые, самые-самые", "answer": "Вы", "value": 2000, "used": False}
                 ]
             }
         }
@@ -168,6 +183,7 @@ class GameController(QObject):
         }
         self.update_player_state.emit(data)
 
+
 # Функция для рекурсивного очищения лэйаута
 def clear_layout(layout):
     while layout.count():
@@ -177,6 +193,7 @@ def clear_layout(layout):
             widget.deleteLater()
         else:
             clear_layout(item.layout())
+
 
 # Окно ведущего
 class HostWindow(QMainWindow):
@@ -274,7 +291,7 @@ class HostWindow(QMainWindow):
             h_layout.addWidget(topic_label)
             for i, q in enumerate(questions):
                 btn = QPushButton(f"{q['value']}")
-                # TODO: change coclor
+                # TODO: change color
                 btn.setStyleSheet("QPushButton:disabled { border: 2px solid #b9d1f8; color: #b9d1f8; }")
                 btn.clicked.connect(lambda checked, t=topic, idx=i: self.select_question(t, idx))
                 btn.setEnabled(not q.get("used", False))
@@ -357,6 +374,7 @@ class HostWindow(QMainWindow):
         else:
             self.current_question_label.setText("Нет выбранного вопроса")
         self.round_label.setText(f"{data['current_round']}")
+
 
 # Окно для игроков (только для отображения)
 class PlayerWindow(QMainWindow):
@@ -523,6 +541,7 @@ class PlayerWindow(QMainWindow):
             self.round_label.setText(f"{data['current_round']}")
         elif self.stack.currentIndex() == 2:
             self.update_question_page()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
